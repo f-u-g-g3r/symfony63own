@@ -16,12 +16,12 @@ class UserType extends AbstractType
     {
         $builder
             ->add('firstname', TextType::class, [
-                'attr' => ['class' => 'input input-bordered w-full max-w-xs', 'placeholder' => 'Firstname'],
+                'attr' => ['class' => 'input input-bordered w-full max-w-xs', 'placeholder' => 'First name'],
                 'label' => false,
                 'row_attr' => ['class' => 'divBottom']
             ])
             ->add('lastname', TextType::class, [
-                'attr' => ['class' => 'input input-bordered w-full max-w-xs', 'placeholder' => 'Lastname'],
+                'attr' => ['class' => 'input input-bordered w-full max-w-xs', 'placeholder' => 'Last name'],
                 'label' => false,
                 'row_attr' => ['class' => 'divBottom']
             ])
