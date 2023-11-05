@@ -3,14 +3,17 @@
 namespace App\Controller;
 
 use App\Entity\User;
-use App\Form\Type\UserType;
+use App\Form\Type\LoginType;
+use App\Form\Type\RegistrationType;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
 class UserController extends AbstractController
 {
@@ -22,18 +25,26 @@ class UserController extends AbstractController
         $this->session = $requestStack->getSession();
     }
 
-    #[Route('/user', name: 'user_form')]
-    public function new (Request $request, EntityManagerInterface $entityManager): Response
+    #[Route('/reg_user', name: 'reg_form')]
+    public function register (Request $request, EntityManagerInterface $entityManager, UserPasswordHasherInterface $passwordHasher): Response
     {
-
         $user = new User();
 
-        $form = $this->createForm(UserType::class, $user);
+        $regForm = $this->createForm(RegistrationType::class, $user);
 
-        $form->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()) {
-            $user = $form->getData();
-            $user->setPassword(password_hash($user->getPassword(), PASSWORD_BCRYPT));
+
+
+        $regForm->handleRequest($request);
+        if ($regForm->isSubmitted() && $regForm->isValid()) {
+            $user = $regForm->getData();
+
+            $plaintextPassword = $user->getPassword();
+            $hashedPassword = $passwordHasher->hashPassword(
+                $user,
+                $plaintextPassword
+            );
+            $user->setPassword($hashedPassword);
+
             $entityManager->persist($user);
             $entityManager->flush();
 
@@ -42,15 +53,32 @@ class UserController extends AbstractController
             return $this->redirectToRoute('registration_success');
         }
 
-        return $this->render('user/new.html.twig', [
-            'form' => $form,
+        return $this->render('user/register.html.twig', [
+            'regForm' => $regForm,
         ]);
     }
 
-    #[Route('/registration_success', name: "registration_success")]
+
+    #[Route('/log_user', name: 'app_login')]
+    public function login (AuthenticationUtils $authenticationUtils, Request $request): Response
+    {
+        $error = $authenticationUtils->getLastAuthenticationError();
+        $lastUsername = $authenticationUtils->getLastUsername();
+
+
+
+        return $this->render('user/login.html.twig', [
+            'last_username' => $lastUsername,
+            'error' => $error,
+        ]);
+    }
+
+
+    #[Route('/home', name: "registration_success")]
     public function success(UserRepository $repository): Response
     {
-        $user = $repository->find($this->session->get('uid'));
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+        $user = $this->getUser();
 
         $firstname = $user->getFirstname();
         $lastname = $user->getLastname();
