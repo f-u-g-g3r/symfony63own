@@ -4,7 +4,9 @@
 
     <div class="collapse-title text-xl font-medium">
         <p><a class="btn btn-primary" href="/logout">Logout</a></p>
-        Hello, {{ fullname }}!
+        {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+            Hello, {{ app.user.firstname }} {{ app.user.lastname }}!
+        {% endif %}
     </div>
 
 {% endblock %}
