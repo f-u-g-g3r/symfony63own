@@ -34,6 +34,15 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private ?string $password = null;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $additional1 = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $additional2 = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $additional3 = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -58,7 +67,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     public function getUserIdentifier(): string
     {
-        return (string) $this->email;
+        return (string)$this->email;
     }
 
     /**
@@ -124,6 +133,41 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->lastname = $lastname;
     }
 
+    public function getAdditional1(): ?string
+    {
+        return $this->additional1;
+    }
+
+    public function setAdditional1(?string $additional1): static
+    {
+        $this->additional1 = $additional1;
+
+        return $this;
+    }
+
+    public function getAdditional2(): ?string
+    {
+        return $this->additional2;
+    }
+
+    public function setAdditional2(?string $additional2): static
+    {
+        $this->additional2 = $additional2;
+
+        return $this;
+    }
+
+    public function getAdditional3(): ?string
+    {
+        return $this->additional3;
+    }
+
+    public function setAdditional3(?string $additional3): static
+    {
+        $this->additional3 = $additional3;
+
+        return $this;
+    }
 
 
 }

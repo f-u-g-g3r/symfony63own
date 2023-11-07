@@ -7,6 +7,8 @@
             <div style="color: red"><b>{{ error.messageKey|trans(error.messageData, 'security') }}</b></div>
         {% endif %}
 
+
+
         <form action="{{ path('app_login') }}" method="post">
             <div id="login">
                 <div class="divBottom">

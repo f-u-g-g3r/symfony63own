@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\User;
+use App\Form\Type\AdditionalType;
 use App\Form\Type\LoginType;
 use App\Form\Type\RegistrationType;
 use App\Repository\UserRepository;
@@ -33,8 +34,6 @@ class UserController extends AbstractController
 
         $regForm = $this->createForm(RegistrationType::class, $user);
 
-
-
         $regForm->handleRequest($request);
         if ($regForm->isSubmitted() && $regForm->isValid()) {
             $user = $regForm->getData();
@@ -53,7 +52,7 @@ class UserController extends AbstractController
 
             $this->session->set('uid', $user->getId());
 
-            return $this->redirectToRoute('registration_success');
+            return $this->redirectToRoute('reg_form2');
         }
 
         return $this->render('user/register.html.twig', [
@@ -82,6 +81,9 @@ class UserController extends AbstractController
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
         $user = $this->getUser();
+        if (!$this->isAccountCompleted($user)) {
+            return $this->redirectToRoute('reg_form2');
+        }
 
         $firstname = $user->getFirstname();
         $lastname = $user->getLastname();
@@ -91,5 +93,41 @@ class UserController extends AbstractController
             'session' => $this->session,
             'fullname' => $fullname,
         ]);
+    }
+
+
+    #[Route('/reg_form2', name: 'reg_form2')]
+    public function register2(Request $request, EntityManagerInterface $entityManager): Response
+    {
+        $user = $this->getUser();
+
+        $addForm = $this->createForm(AdditionalType::class, $user);
+
+        $addForm->handleRequest($request);
+        if ($addForm->isSubmitted() && $addForm->isValid()) {
+            $data = $addForm->getData();
+
+            $user->setAdditional1($data->getAdditional1());
+            $user->setAdditional2($data->getAdditional2());
+            $user->setAdditional3($data->getAdditional3());
+
+            $entityManager->persist($user);
+            $entityManager->flush();
+
+            return $this->redirectToRoute('registration_success');
+        }
+
+        return $this->render('user/additionalInfo.html.twig', [
+            'addForm' => $addForm,
+        ]);
+    }
+
+    private function isAccountCompleted($user)
+    {
+        if ($user->getAdditional1() == null || $user->getAdditional2() == null || $user->getAdditional3() == null ) {
+            return false;
+        } else {
+            return true;
+        }
     }
 }
