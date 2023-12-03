@@ -1,7 +1,0 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
-.divBottom {
-    margin: 15px 0;
-}

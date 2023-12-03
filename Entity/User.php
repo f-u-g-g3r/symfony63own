@@ -4,11 +4,14 @@ namespace App\Entity;
 
 use App\Repository\UserRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\Table(name: '`user`')]
+#[UniqueEntity(fields: ['email'], message: 'There is already an account with this email')]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
@@ -17,13 +20,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?int $id = null;
 
     #[ORM\Column(length: 180, unique: true)]
+    #[Assert\NotBlank(message: 'Sisestage kehtiv e-posti aadress')]
     private ?string $email = null;
-
-    #[ORM\Column(length: 180)]
-    private ?string $firstname = null;
-
-    #[ORM\Column(length: 180)]
-    private ?string $lastname = null;
 
     #[ORM\Column]
     private array $roles = [];
@@ -32,16 +30,16 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @var string The hashed password
      */
     #[ORM\Column]
+//    #[Assert\NotBlank] doesn't work
     private ?string $password = null;
 
-    #[ORM\Column(length: 255, nullable: true)]
-    private ?string $additional1 = null;
+    #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message: 'Eesnimi on kohustuslik')]
+    private ?string $firstName = null;
 
-    #[ORM\Column(length: 255, nullable: true)]
-    private ?string $additional2 = null;
-
-    #[ORM\Column(length: 255, nullable: true)]
-    private ?string $additional3 = null;
+    #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message: 'Perekonnanimi on kohustuslik')]
+    private ?string $lastName = null;
 
     public function getId(): ?int
     {
@@ -67,7 +65,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     public function getUserIdentifier(): string
     {
-        return (string)$this->email;
+        return (string) $this->email;
     }
 
     /**
@@ -113,61 +111,27 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         // $this->plainPassword = null;
     }
 
-    public function getFirstname(): ?string
+    public function getFirstName(): ?string
     {
-        return $this->firstname;
+        return $this->firstName;
     }
 
-    public function setFirstname(?string $firstname): void
+    public function setFirstName(string $firstName): static
     {
-        $this->firstname = $firstname;
-    }
-
-    public function getLastname(): ?string
-    {
-        return $this->lastname;
-    }
-
-    public function setLastname(?string $lastname): void
-    {
-        $this->lastname = $lastname;
-    }
-
-    public function getAdditional1(): ?string
-    {
-        return $this->additional1;
-    }
-
-    public function setAdditional1(?string $additional1): static
-    {
-        $this->additional1 = $additional1;
+        $this->firstName = $firstName;
 
         return $this;
     }
 
-    public function getAdditional2(): ?string
+    public function getLastName(): ?string
     {
-        return $this->additional2;
+        return $this->lastName;
     }
 
-    public function setAdditional2(?string $additional2): static
+    public function setLastName(string $lastName): static
     {
-        $this->additional2 = $additional2;
+        $this->lastName = $lastName;
 
         return $this;
     }
-
-    public function getAdditional3(): ?string
-    {
-        return $this->additional3;
-    }
-
-    public function setAdditional3(?string $additional3): static
-    {
-        $this->additional3 = $additional3;
-
-        return $this;
-    }
-
-
 }

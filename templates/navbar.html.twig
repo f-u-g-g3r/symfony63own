@@ -1,0 +1,18 @@
+<nav class="container navbar navbar-light navbar-expand-sm">
+    <span class="navbar-brand">
+{#        <a href="#">#}
+            Praktikaportaal
+{#        </a>#}
+    </span>
+    <ul class="navbar-nav"></ul>
+    <div class="login">
+        <span class="navbar-text">
+        <span>Eesti</span>&nbsp;<a href="#"><s>English</s></a></span>
+        {% if app.user %}
+            <span>
+                | {{ app.user.userIdentifier }}, <a
+                        href="{{ path('app_logout') }}">Logi välja</a>
+            </span>
+        {% endif %}
+    </div>
+</nav>

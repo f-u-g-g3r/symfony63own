@@ -1,0 +1,45 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Log in!{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <div class="row">
+            <div class="col-md-10 offset-md-1">
+                <h3>
+                    Logi sisse
+                    <small>
+                        või <a href="/register">loo konto</a>
+                    </small>
+                </h3>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6 offset-md-3">
+                <form method="post">
+                    <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+                    <div class="form-group">
+                        <label for="inputEmail">E-posti aadress</label>
+                        <input type="email" class="form-control" {#value="{{ last_username }}"#} name="email"
+                               id="inputEmail"
+                               autocomplete="email" required="required"
+                               autofocus="1">
+                    </div>
+                    <div class="form-group">
+                        <label for="inputPassword">Salasõna</label>
+                        <input type="password" class="form-control" name="password" id="inputPassword"
+                               autocomplete="current-password" required="required">
+                    </div>
+                    {% if error %}
+                        <p>{{ error.messageKey|trans(error.messageData, 'security') }}</p>
+                    {% endif %}
+
+                    <button type="submit" class="btn btn-primary pull-right">
+                        Logi sisse
+                    </button>
+                    <p><a href="/forgot">Unustasid salasõna?</a></p>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}

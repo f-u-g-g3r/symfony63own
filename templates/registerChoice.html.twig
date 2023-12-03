@@ -1,0 +1,48 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Log in!{% endblock %}
+
+{% block body %}
+<div class="container">
+    <div class="row">
+        <div class="col-md-10 offset-md-1">
+            <h3>
+                Loo konto
+                <small>
+                    või <a href="/login">logi sisse</a>
+                </small>
+            </h3>
+        </div>
+    </div>
+    <form action="/register/details">
+    <div class="row" style="margin-bottom: 0">
+        <div class="col-md-5 offset-md-1 event-list">
+            <div class="event">
+                <h3>Olen õpilane</h3>
+                <p>
+{#                    <strong>Signing up to contribute to a project here?</strong>#}
+{#                    <br/>#}
+                    Loo profiil, otsi ja kandideeri praktikakohale.
+                </p>
+                <button class="btn btn-primary btn-block" name="type" type="submit" value="student">
+                    Loo uus õpilaskonto
+                </button>
+            </div>
+        </div>
+        <div class="col-md-5">
+            <div class="event">
+                <h3>Olen tööandja</h3>
+                <p>
+{#                    <strong>Want to host your own projects here?</strong>#}
+{#                    <br/>#}
+                    Täitke ettevõtte andmed, leidke õpilased, võtke vastu avaldusi.
+                </p>
+                <button class="btn btn-secondary btn-block" name="type" type="submit" value="employer" disabled>
+                    Pole rakendatud{#Loo uus tööandjakonto#}
+                </button>
+            </div>
+        </div>
+    </div>
+    </form>
+</div>
+{% endblock %}
