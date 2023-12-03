@@ -1,0 +1,14 @@
+Posts model:
+	company name
+	company email
+	company address
+	contact phone number
+	requirements
+	title
+	body
+	
+	posted_at
+	posted_until
+	
+	
+	
