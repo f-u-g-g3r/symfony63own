@@ -18,7 +18,7 @@ class RegistrationFormType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('firstName', TextType::class ,[
+            ->add('firstName', TextType::class, [
                 'attr' => ['class' => 'form-control', 'autofocus' => '1'],
                 'label' => 'Eesnimi',
                 'row_attr' => ['class' => 'form-group']

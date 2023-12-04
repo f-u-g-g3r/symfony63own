@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\PostRepository;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: PostRepository::class)]
@@ -35,10 +36,10 @@ class Post
     private ?string $body = null;
 
     #[ORM\Column]
-    private ?\DateTimeImmutable $posted_at = null;
+    private ?\DateTimeImmutable $postedAt = null;
 
-    #[ORM\Column]
-    private ?\DateTimeImmutable $posted_until = null;
+    #[ORM\Column(type: Types::DATE_MUTABLE)]
+    private ?\DateTimeInterface $postedUntil = null;
 
     public function getId(): ?int
     {
@@ -131,24 +132,24 @@ class Post
 
     public function getPostedAt(): ?\DateTimeImmutable
     {
-        return $this->posted_at;
+        return $this->postedAt;
     }
 
-    public function setPostedAt(\DateTimeImmutable $posted_at): static
+    public function setPostedAt(\DateTimeImmutable $postedAt): static
     {
-        $this->posted_at = $posted_at;
+        $this->postedAt = $postedAt;
 
         return $this;
     }
 
-    public function getPostedUntil(): ?\DateTimeImmutable
+    public function getPostedUntil(): ?\DateTimeInterface
     {
-        return $this->posted_until;
+        return $this->postedUntil;
     }
 
-    public function setPostedUntil(\DateTimeImmutable $posted_until): static
+    public function setPostedUntil(\DateTimeInterface $postedUntil): static
     {
-        $this->posted_until = $posted_until;
+        $this->postedUntil = $postedUntil;
 
         return $this;
     }
